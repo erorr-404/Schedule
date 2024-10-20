@@ -1,0 +1,26 @@
+QMainWindow {
+    background-color: #282c34;
+    font-family: "Roboto";
+    font-size: 14px;
+}
+
+QTabBar::tab {
+    width: 25px; /* Set the width for square tabs */
+    height: 100px; /* Set the height for square tabs */
+    background-color: #3c3c3c;
+    color: white;
+    border: 1px solid #5e5e5e;
+    padding: 10px;
+}
+
+QTabBar::tab:selected {
+    background-color: #4e4e4e;
+}
+
+QTabWidget::pane {
+    border: 1px solid #3e3e3e;
+}
+
+QTabBar::tab {
+    alignment: center; /* Center the text horizontally */
+}
