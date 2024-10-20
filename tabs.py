@@ -6,7 +6,8 @@ import api_helper
 import db_handler
 import json
 
-strings = json.load("strings.json")
+with open("strings.json") as strings_json:
+    strings = json.load(strings_json)
 
 
 class ScheduleWidget(QWidget):
@@ -38,7 +39,7 @@ class MainWidget(QWidget):
             self.default_schedule_contr_layout)
 
         self.restore_schedule = QPushButton("Restore default schedule")
-        self.restore_schedule.clicked.connect(self.fetch_schedule)
+        self.restore_schedule.clicked.connect(self.fetch_button_clicked)
         self.default_schedule_contr_layout.addWidget(self.restore_schedule)
 
         self.restore_schedule_label = QLabel(
@@ -47,12 +48,6 @@ class MainWidget(QWidget):
             self.restore_schedule_label)
 
         self.layout.addWidget(self.default_schedule_contr_widget)
-
-    def fetch_schedule(self):
-        api = api_helper.ApiHelper()
-        self.schedule = api.get_schedule()
-        db = db_handler.DBHandler()
-        db.insert_week(self.schedule)
 
     # This decorator allows async functions to be used in PyQt slots
     @asyncSlot()

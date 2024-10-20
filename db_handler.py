@@ -122,7 +122,7 @@ class DBHandler:
                                 (day.day_number, lesson_id))
         self.connection.commit()
 
-    def insert_week(self, week: Week):
+    async def insert_week(self, week: Week):
         """Insert a Week object and its days."""
         for day in week.days:
             self.insert_day(day)

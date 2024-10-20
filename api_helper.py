@@ -10,10 +10,10 @@ LINKS = "http://vl4-timetable.pp.ua/data/links.json"
 
 
 class ApiHelper:
-    def get_schedule(self):
+    async def get_schedule(self):
         urls = [SCHEDULE, IMPORTANCE, TIME, BOOKS, LINKS]
         # get raw data
-        raw_data = asyncio.run(self.gather_all(urls))
+        raw_data = await self.gather_all(urls)
         # divide raw data
         timetable, importance, time, books, links = raw_data
 

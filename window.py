@@ -28,4 +28,3 @@ class MainWindow(QMainWindow):
             self.schedule_tab, QIcon("images/calendar.png"), "Schedule")
         self.tab_widget.addTab(
             self.books_tab, QIcon("images/book.png"), "Books")
-
