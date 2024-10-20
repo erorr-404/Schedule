@@ -1,9 +1,12 @@
 from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton
-
+from qasync import asyncSlot  # qasync integrates asyncio with PyQt
 import api_helper
 import db_handler
+import json
+
+strings = json.load("strings.json")
 
 
 class ScheduleWidget(QWidget):
@@ -26,16 +29,22 @@ class MainWidget(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.setLayout(self.layout)
 
+        self.label = QLabel("Home")
+        self.layout.addWidget(self.label)
+
         self.default_schedule_contr_widget = QWidget()
         self.default_schedule_contr_layout = QHBoxLayout()
-        self.default_schedule_contr_widget.setLayout(self.default_schedule_contr_layout)
+        self.default_schedule_contr_widget.setLayout(
+            self.default_schedule_contr_layout)
 
         self.restore_schedule = QPushButton("Restore default schedule")
         self.restore_schedule.clicked.connect(self.fetch_schedule)
         self.default_schedule_contr_layout.addWidget(self.restore_schedule)
 
-        self.label = QLabel("Home")
-        self.default_schedule_contr_layout.addWidget(self.label)
+        self.restore_schedule_label = QLabel(
+            strings.get("restore_label", "Error"))
+        self.default_schedule_contr_layout.addWidget(
+            self.restore_schedule_label)
 
         self.layout.addWidget(self.default_schedule_contr_widget)
 
@@ -44,6 +53,17 @@ class MainWidget(QWidget):
         self.schedule = api.get_schedule()
         db = db_handler.DBHandler()
         db.insert_week(self.schedule)
+
+    # This decorator allows async functions to be used in PyQt slots
+    @asyncSlot()
+    async def fetch_button_clicked(self):
+        # Async task called when button is clicked
+        print("Button pressed, starting async task...")
+        api = api_helper.ApiHelper()
+        self.schedule = await api.get_schedule()
+
+        db = db_handler.DBHandler()
+        await db.insert_week(self.schedule)
 
 
 class BooksWidget(QWidget):

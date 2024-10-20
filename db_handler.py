@@ -1,5 +1,5 @@
 import sqlite3
-from data import *
+from data import TimeStamp, Subject, Lesson, Day, Week
 
 DATABASE_PATH = "schedule.db"
 TASK_TABLE_NAME = "tasks"

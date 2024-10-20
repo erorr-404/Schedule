@@ -1,7 +1,18 @@
-QMainWindow {
-    background-color: #282c34;
+* {
     font-family: "Roboto";
     font-size: 14px;
+    color: white;
+}
+
+QMainWindow {
+    background-color: #282c34;
+    color: white;
+    font-family: "Roboto";
+    font-size: 16px;
+}
+
+QPushButton {
+    background-color: #3b414d;
 }
 
 QTabBar::tab {

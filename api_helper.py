@@ -1,6 +1,6 @@
 import asyncio
 import aiohttp
-from data import *
+from data import TimeStamp, Subject, Lesson, Day, Week
 
 SCHEDULE = "http://vl4-timetable.pp.ua/data/timetable.json"
 IMPORTANCE = "http://vl4-timetable.pp.ua/data/importance.json"
@@ -20,13 +20,16 @@ class ApiHelper:
         subjects = []
         # iterate through all keys in links and create all subjects
         for l_key in links.keys():
-            subjects.append(Subject(l_key, int(importance[l_key]), links[l_key]))
+            subjects.append(
+                Subject(l_key, int(importance[l_key]), links[l_key]))
 
         # create time stamps in format: (TimeStamp(start), TimeStamp(end))
         time_stamps = []
         for key in time.keys():
-            start_time_stamp = TimeStamp(time[key]["start"]["hour"], time[key]["start"]["minute"])
-            end_time_stamp = TimeStamp(time[key]["end"]["hour"], time[key]["end"]["minute"])
+            start_time_stamp = TimeStamp(
+                time[key]["start"]["hour"], time[key]["start"]["minute"])
+            end_time_stamp = TimeStamp(
+                time[key]["end"]["hour"], time[key]["end"]["minute"])
             time_stamps.append((start_time_stamp, end_time_stamp))
 
         days = []
@@ -46,7 +49,9 @@ class ApiHelper:
                 if subject is None:
                     print(f"Cant find subject {lesson} in {today_lessons}")
                 else:
-                    cur_day_lessons.append(Lesson(subject, time_stamps[index][0], time_stamps[index][1]))
+                    cur_day_lessons.append(
+                        Lesson(subject, time_stamps[index][0],
+                               time_stamps[index][1]))
             days.append(Day(day_pos, cur_day_lessons))
 
         week = Week(days)
@@ -67,7 +72,7 @@ class ApiHelper:
         async with aiohttp.ClientSession() as session:
             tasks = []
             for url in urls:
-                # Schedule the self.fetch_json coroutine and add to the task list
+                # Schedule the fetch_json coroutine and add to the task list
                 tasks.append(self.fetch_json(session, url))
 
             # Wait for all tasks to complete (run them concurrently)
@@ -82,5 +87,7 @@ class ApiHelper:
             if response.status == 200:
                 return await response.json()  # Return the JSON response
             else:
-                print(f"Failed to fetch from {url}. Status code: {response.status}")
+                print(
+                    f"Failed to fetch from {url}.",
+                    f"Status code: {response.status}")
                 return None
